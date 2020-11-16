@@ -11,13 +11,6 @@ var satelliteMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}
     accessToken: API_KEY
 });
 
-var grayscaleMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 18,
-    id: "mapbox.light",
-    accessToken: API_KEY
-});
-
 var outdoorsMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
@@ -28,7 +21,6 @@ var outdoorsMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
 // Base Layers
 var baseMaps = {
     "Satellite": satelliteMap,
-    "Grayscale": grayscaleMap,
     "Outdoors": outdoorsMap
 };
 
@@ -102,21 +94,13 @@ d3.json(earthquakesURL, function(earthquakeData) {
     earthquakes.addTo(myMap);
 
     // Set Up Legend
-        var legend = L.control({ position: "bottomright" });
-        legend.onAdd = function(magnitude) {
-            var div = L.DomUtil.create("div", "info legend"), 
-            magnitudeLevels = [0, 1, 2, 3, 4, 5];
-    
-            div.innerHTML += "<h3>Magnitude</h3>"
-    
-            for (var i = 0; i < magnitudeLevels.length; i++) {
-                div.innerHTML +=
-                    '<i style="background: ' + chooseColor(magnitudeLevels[i] + 1) + '"></i> ' +
-                    magnitudeLevels[i] + (magnitudeLevels[i + 1] ? '&ndash;' + magnitudeLevels[i + 1] + '<br>' : '+');
-            }
-            return div;
-        };
-        // Add Legend 
-        legend.addTo(myMap);
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function(mymap){
+        var div = L.DomUtil.create('div', 'legend');
+        labels = ['<strong>Magnitude</strong>'],
+        categories = ["0","1","2","3","4", "5"];
+        return div;
+    };
+legend.addTo(mymap);
     });
   
